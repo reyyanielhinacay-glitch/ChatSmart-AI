@@ -1,0 +1,1019 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#10111b">
+<meta name="description" content="ChatSmart AI - Your all-in-one digital assistant.">
+<title>ChatSmart AI - Your Smart Assistant</title>
+
+<style>
+:root {
+  --bg:#10111b;
+  --sidebar:#171725;
+  --panel:#1c1d2c;
+  --panel2:#25263a;
+  --purple:#8b5cf6;
+  --purple2:#7042db;
+  --text:#f5f3ff;
+  --muted:#a4a2b8;
+  --border:#34354b;
+}
+
+* {
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body {
+  font-family:Arial,Helvetica,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  height:100vh;
+  overflow:hidden;
+}
+
+button,textarea,select {
+  font:inherit;
+}
+
+button {
+  cursor:pointer;
+}
+
+.app {
+  display:flex;
+  height:100vh;
+}
+
+/* SIDEBAR */
+
+.sidebar {
+  width:265px;
+  background:var(--sidebar);
+  border-right:1px solid var(--border);
+  padding:20px;
+  display:flex;
+  flex-direction:column;
+  flex-shrink:0;
+  z-index:20;
+  transition:transform .25s;
+}
+
+.brand {
+  display:flex;
+  align-items:center;
+  gap:11px;
+  margin-bottom:30px;
+}
+
+.logo {
+  width:43px;
+  height:43px;
+  border-radius:14px;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(135deg,#a78bfa,#6d28d9);
+  font-size:24px;
+}
+
+.brand h2 {
+  font-size:19px;
+  white-space:nowrap;
+}
+
+.brand span {
+  color:#a78bfa;
+}
+
+.new-chat {
+  width:100%;
+  padding:14px;
+  background:var(--purple);
+  border:0;
+  color:white;
+  border-radius:11px;
+  font-weight:bold;
+  margin-bottom:28px;
+}
+
+.new-chat:hover {
+  background:var(--purple2);
+}
+
+.section-label {
+  font-size:11px;
+  letter-spacing:1.5px;
+  color:var(--muted);
+  margin-bottom:13px;
+}
+
+.history {
+  flex:1;
+  overflow-y:auto;
+}
+
+.history-item {
+  display:block;
+  width:100%;
+  padding:12px;
+  border:0;
+  border-radius:9px;
+  background:transparent;
+  color:var(--muted);
+  text-align:left;
+  margin-bottom:5px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.history-item:hover,
+.history-item.active {
+  background:var(--panel2);
+  color:white;
+}
+
+.sidebar-bottom {
+  border-top:1px solid var(--border);
+  padding-top:15px;
+}
+
+.profile {
+  display:flex;
+  align-items:center;
+  gap:11px;
+  padding:9px 0;
+}
+
+.avatar {
+  width:37px;
+  height:37px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#a78bfa,#ec4899);
+  display:grid;
+  place-items:center;
+  font-weight:bold;
+}
+
+.profile small {
+  color:var(--muted);
+}
+
+.clear-btn {
+  width:100%;
+  background:transparent;
+  border:1px solid var(--border);
+  color:var(--muted);
+  border-radius:9px;
+  padding:10px;
+  margin-top:10px;
+  font-size:12px;
+}
+
+.clear-btn:hover {
+  color:white;
+  border-color:var(--purple);
+}
+
+/* MAIN */
+
+.main {
+  flex:1;
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+}
+
+.topbar {
+  height:70px;
+  padding:0 24px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  background:#141421;
+  border-bottom:1px solid var(--border);
+}
+
+.top-left {
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.menu-btn {
+  border:0;
+  background:transparent;
+  color:white;
+  font-size:24px;
+}
+
+.model-select {
+  background:var(--panel2);
+  border:1px solid var(--border);
+  color:white;
+  padding:11px;
+  border-radius:10px;
+  max-width:200px;
+  outline:none;
+}
+
+.demo-status {
+  font-size:12px;
+  color:#a78bfa;
+  white-space:nowrap;
+}
+
+/* CHAT AREA */
+
+.messages {
+  flex:1;
+  overflow-y:auto;
+  padding:30px 20px;
+  scroll-behavior:smooth;
+}
+
+.welcome {
+  max-width:760px;
+  margin:55px auto;
+  text-align:center;
+}
+
+.welcome-icon {
+  width:76px;
+  height:76px;
+  margin:0 auto 23px;
+  border-radius:25px;
+  display:grid;
+  place-items:center;
+  font-size:38px;
+  background:linear-gradient(135deg,#9b6aff,#5424b8);
+  box-shadow:0 12px 35px #8b5cf644;
+}
+
+.welcome h1 {
+  font-size:clamp(26px,4vw,40px);
+  margin-bottom:13px;
+  line-height:1.25;
+}
+
+.welcome h1 span {
+  color:#a78bfa;
+}
+
+.welcome p {
+  color:var(--muted);
+  font-size:15px;
+  line-height:1.8;
+}
+
+.suggestions {
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:13px;
+  margin-top:32px;
+}
+
+.suggestion {
+  padding:19px;
+  text-align:left;
+  background:var(--panel);
+  color:white;
+  border:1px solid var(--border);
+  border-radius:13px;
+  line-height:1.6;
+}
+
+.suggestion:hover {
+  border-color:var(--purple);
+  background:var(--panel2);
+}
+
+.suggestion strong {
+  display:block;
+  margin-bottom:5px;
+}
+
+.suggestion small {
+  color:var(--muted);
+}
+
+/* MESSAGE BUBBLES */
+
+.message-row {
+  max-width:850px;
+  margin:0 auto 25px;
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+}
+
+.message-row.user {
+  flex-direction:row-reverse;
+}
+
+.message-avatar {
+  width:36px;
+  height:36px;
+  min-width:36px;
+  display:grid;
+  place-items:center;
+  border-radius:12px;
+  background:var(--panel2);
+}
+
+.message-row.user .message-avatar {
+  background:var(--purple);
+}
+
+.message-bubble {
+  max-width:82%;
+  background:var(--panel2);
+  border-radius:14px;
+  padding:14px 17px;
+  line-height:1.75;
+  font-size:14px;
+  overflow-wrap:anywhere;
+  white-space:pre-wrap;
+}
+
+.message-row.user .message-bubble {
+  background:#5938a0;
+}
+
+.typing {
+  max-width:850px;
+  margin:0 auto 20px;
+  color:var(--muted);
+  font-size:13px;
+}
+
+/* INPUT AREA */
+
+.composer-area {
+  padding:15px 20px 18px;
+  background:linear-gradient(transparent,var(--bg) 25%);
+}
+
+.composer {
+  max-width:850px;
+  margin:auto;
+  display:flex;
+  align-items:flex-end;
+  gap:10px;
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:17px;
+  padding:10px;
+}
+
+.composer:focus-within {
+  border-color:var(--purple);
+}
+
+.composer textarea {
+  flex:1;
+  min-width:0;
+  max-height:130px;
+  resize:none;
+  padding:11px;
+  background:transparent;
+  border:0;
+  outline:none;
+  color:white;
+  font-size:15px;
+  line-height:1.5;
+}
+
+.composer textarea::placeholder {
+  color:#88869c;
+}
+
+.send-btn {
+  width:45px;
+  height:45px;
+  flex-shrink:0;
+  border:0;
+  border-radius:12px;
+  color:white;
+  background:var(--purple);
+  font-size:21px;
+}
+
+.send-btn:hover {
+  background:var(--purple2);
+}
+
+.send-btn:disabled {
+  opacity:.5;
+}
+
+.disclaimer {
+  text-align:center;
+  font-size:11px;
+  color:#77758b;
+  margin-top:11px;
+}
+
+/* MOBILE */
+
+@media(max-width:700px) {
+  .sidebar {
+    position:fixed;
+    top:0;
+    bottom:0;
+    left:0;
+    transform:translateX(-105%);
+  }
+
+  .sidebar.open {
+    transform:translateX(0);
+  }
+
+  .topbar {
+    padding:0 12px;
+  }
+
+  .messages {
+    padding:18px 12px;
+  }
+
+  .welcome {
+    margin:35px auto;
+  }
+
+  .suggestions {
+    grid-template-columns:1fr;
+  }
+
+  .composer-area {
+    padding:10px;
+  }
+
+  .demo-status {
+    font-size:10px;
+  }
+
+  .message-bubble {
+    max-width:88%;
+  }
+}
+
+@media(min-width:701px) {
+  .menu-btn {
+    display:none;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- SIDEBAR -->
+
+<aside class="sidebar" id="sidebar">
+
+  <div class="brand">
+    <div class="logo">✦</div>
+    <h2>Chat<span>Smart</span> AI</h2>
+  </div>
+
+  <button class="new-chat" id="newChatBtn">
+    ＋ New Chat
+  </button>
+
+  <div class="section-label">CHAT HISTORY</div>
+
+  <div class="history" id="history"></div>
+
+  <div class="sidebar-bottom">
+    <div class="profile">
+      <div class="avatar">U</div>
+      <div>
+        <strong>My Account</strong><br>
+        <small>ChatSmart User</small>
+      </div>
+    </div>
+
+    <button class="clear-btn" id="clearBtn">
+      Clear Chat History
+    </button>
+  </div>
+
+</aside>
+
+<!-- MAIN CONTENT -->
+
+<main class="main">
+
+  <header class="topbar">
+
+    <div class="top-left">
+      <button class="menu-btn" id="menuBtn">☰</button>
+
+      <select class="model-select" id="model">
+        <option value="general">✦ ChatSmart Assistant</option>
+        <option value="study">📚 Study Assistant</option>
+        <option value="writing">✍️ Writing Assistant</option>
+        <option value="coding">💻 Coding Assistant</option>
+      </select>
+    </div>
+
+    <div class="demo-status">
+      ● DEMO VERSION
+    </div>
+
+  </header>
+
+  <!-- MESSAGES -->
+
+  <section class="messages" id="messages">
+
+    <div class="welcome">
+
+      <div class="welcome-icon">✦</div>
+
+      <h1>
+        Hello! Welcome to
+        <span>ChatSmart AI</span>
+      </h1>
+
+      <p>
+        Your smart digital assistant.<br>
+        Ask questions, learn something new,
+        or explore your ideas.
+      </p>
+
+      <div class="suggestions">
+
+        <button class="suggestion" data-prompt="Explain artificial intelligence in simple words.">
+          <strong>🧠 Learn Something</strong>
+          <small>Understand difficult topics simply.</small>
+        </button>
+
+        <button class="suggestion" data-prompt="Help me write a good introduction for my school project.">
+          <strong>✍️ Writing Help</strong>
+          <small>Improve your writing and ideas.</small>
+        </button>
+
+        <button class="suggestion" data-prompt="Teach me the basics of HTML.">
+          <strong>💻 Learn Coding</strong>
+          <small>Explore programming basics.</small>
+        </button>
+
+        <button class="suggestion" data-prompt="Give me five interesting science facts.">
+          <strong>🌎 Explore Ideas</strong>
+          <small>Discover interesting information.</small>
+        </button>
+
+      </div>
+    </div>
+
+  </section>
+
+  <!-- INPUT -->
+
+  <div class="composer-area">
+
+    <form class="composer" id="chatForm">
+
+      <textarea
+        id="userInput"
+        rows="1"
+        placeholder="Message ChatSmart AI..."
+        required></textarea>
+
+      <button class="send-btn" id="sendBtn" type="submit">
+        ➤
+      </button>
+
+    </form>
+
+    <div class="disclaimer">
+      ChatSmart AI V1.0 · Frontend Demo · Real AI not connected
+    </div>
+
+  </div>
+
+</main>
+</div>
+
+<script>
+
+// APPLICATION DATA
+
+const messages = document.getElementById("messages");
+const historyBox = document.getElementById("history");
+const input = document.getElementById("userInput");
+const model = document.getElementById("model");
+const form = document.getElementById("chatForm");
+const sidebar = document.getElementById("sidebar");
+
+let chats = [];
+let currentChatId = null;
+let waiting = false;
+
+
+// STORAGE
+
+function saveChats() {
+  try {
+    localStorage.setItem(
+      "chatsmart_v1_history",
+      JSON.stringify(chats)
+    );
+  } catch(error) {
+    console.log("Storage unavailable.");
+  }
+}
+
+function loadChats() {
+  try {
+    chats = JSON.parse(
+      localStorage.getItem("chatsmart_v1_history") || "[]"
+    );
+
+    if (!Array.isArray(chats)) chats = [];
+
+  } catch(error) {
+    chats = [];
+  }
+
+  if (chats.length > 0) {
+    currentChatId = chats[0].id;
+  }
+
+  renderHistory();
+  renderMessages();
+}
+
+
+// FIND CURRENT CHAT
+
+function getCurrentChat() {
+  return chats.find(chat => chat.id === currentChatId);
+}
+
+
+// CREATE NEW CHAT
+
+function newChat() {
+  const chat = {
+    id: Date.now() + Math.random(),
+    title: "New Conversation",
+    messages: []
+  };
+
+  chats.unshift(chat);
+  currentChatId = chat.id;
+
+  saveChats();
+  renderHistory();
+  renderMessages();
+
+  input.focus();
+  sidebar.classList.remove("open");
+}
+
+
+// CHAT HISTORY
+
+function renderHistory() {
+  historyBox.innerHTML = "";
+
+  chats.forEach(chat => {
+    const button = document.createElement("button");
+
+    button.className =
+      "history-item" +
+      (chat.id === currentChatId ? " active" : "");
+
+    button.textContent = "💬 " + chat.title;
+
+    button.addEventListener("click", () => {
+      currentChatId = chat.id;
+      renderHistory();
+      renderMessages();
+      sidebar.classList.remove("open");
+    });
+
+    historyBox.appendChild(button);
+  });
+}
+
+
+// WELCOME SCREEN
+
+function showWelcome() {
+  messages.innerHTML = "";
+
+  const welcome = document.createElement("div");
+  welcome.className = "welcome";
+
+  welcome.innerHTML = `
+    <div class="welcome-icon">✦</div>
+    <h1>Hello! Welcome to <span>ChatSmart AI</span></h1>
+    <p>Your smart digital assistant.<br>
+    Ask questions, learn something new, or explore your ideas.</p>
+    <div class="suggestions">
+      <button class="suggestion" data-prompt="Explain artificial intelligence in simple words.">
+        <strong>🧠 Learn Something</strong>
+        <small>Understand difficult topics simply.</small>
+      </button>
+      <button class="suggestion" data-prompt="Teach me the basics of HTML.">
+        <strong>💻 Learn Coding</strong>
+        <small>Explore programming basics.</small>
+      </button>
+      <button class="suggestion" data-prompt="Help me write a school introduction.">
+        <strong>✍️ Writing Help</strong>
+        <small>Improve your writing and ideas.</small>
+      </button>
+      <button class="suggestion" data-prompt="Give me five interesting science facts.">
+        <strong>🌎 Explore Ideas</strong>
+        <small>Discover something interesting.</small>
+      </button>
+    </div>
+  `;
+
+  messages.appendChild(welcome);
+}
+
+
+// ADD MESSAGE
+
+function addMessage(role, text) {
+  const row = document.createElement("div");
+  row.className = "message-row " + role;
+
+  const avatar = document.createElement("div");
+  avatar.className = "message-avatar";
+  avatar.textContent = role === "user" ? "U" : "✦";
+
+  const bubble = document.createElement("div");
+  bubble.className = "message-bubble";
+  bubble.textContent = text;
+
+  row.appendChild(avatar);
+  row.appendChild(bubble);
+
+  messages.appendChild(row);
+}
+
+
+// DISPLAY CURRENT CHAT
+
+function renderMessages() {
+  const chat = getCurrentChat();
+
+  if (!chat || chat.messages.length === 0) {
+    showWelcome();
+    return;
+  }
+
+  messages.innerHTML = "";
+
+  chat.messages.forEach(message => {
+    addMessage(message.role, message.text);
+  });
+
+  scrollBottom();
+}
+
+
+// SCROLL TO BOTTOM
+
+function scrollBottom() {
+  messages.scrollTop = messages.scrollHeight;
+}
+
+
+// DEMO ANSWER ENGINE
+
+function generateResponse(text) {
+  const question = text.toLowerCase();
+  const selected = model.value;
+
+  if (selected === "study") {
+    return "📚 STUDY ASSISTANT\n\n" +
+      "Let's study your topic step by step.\n\n" +
+      "1. Identify the main concept.\n" +
+      "2. Understand its meaning.\n" +
+      "3. Review an example.\n" +
+      "4. Practice what you learned.\n\n" +
+      "Your topic: " + text +
+      "\n\nThis is a demonstration response. A real AI connection is needed for personalized answers.";
+  }
+
+  if (selected === "writing") {
+    return "✍️ WRITING ASSISTANT\n\n" +
+      "Here is a simple writing guide:\n\n" +
+      "1. Start with a clear introduction.\n" +
+      "2. Explain your main ideas.\n" +
+      "3. Add examples and details.\n" +
+      "4. End with a meaningful conclusion.\n\n" +
+      "Your topic: " + text +
+      "\n\nThis is a demonstration response, not a real AI-generated answer.";
+  }
+
+  if (selected === "coding") {
+    return "💻 CODING ASSISTANT\n\n" +
+      "Let's approach your programming task:\n\n" +
+      "1. Understand the problem.\n" +
+      "2. Identify the needed inputs.\n" +
+      "3. Plan the solution.\n" +
+      "4. Write and test the code.\n\n" +
+      "Your request: " + text +
+      "\n\nThis is a demonstration response. Real AI assistance requires an API connection.";
+  }
+
+  if (
+    question.includes("hello") ||
+    question.includes("hi") ||
+    question.includes("hey")
+  ) {
+    return "Hello! 👋 Welcome to ChatSmart AI!\n\n" +
+      "Thanks for trying our platform. What would you like to explore today?\n\n" +
+      "This is currently a demo response.";
+  }
+
+  if (
+    question.includes("artificial intelligence") ||
+    question.includes("what is ai")
+  ) {
+    return "🧠 WHAT IS ARTIFICIAL INTELLIGENCE?\n\n" +
+      "Artificial Intelligence (AI) is a technology that allows computers to perform tasks that usually require human intelligence.\n\n" +
+      "Examples include:\n" +
+      "• Understanding language\n" +
+      "• Recognizing images\n" +
+      "• Answering questions\n" +
+      "• Helping solve problems\n\n" +
+      "This is a sample educational explanation.";
+  }
+
+  if (question.includes("html")) {
+    return "💻 HTML BASICS\n\n" +
+      "HTML stands for HyperText Markup Language.\n\n" +
+      "It is used to structure content on websites.\n\n" +
+      "Examples of HTML elements:\n" +
+      "• <h1> creates a heading.\n" +
+      "• <p> creates a paragraph.\n" +
+      "• <button> creates a button.\n" +
+      "• <img> displays an image.\n\n" +
+      "This is a sample coding explanation.";
+  }
+
+  return "✦ CHATSMART AI\n\n" +
+    "Thank you for your message!\n\n" +
+    "You entered:\n" + text +
+    "\n\nThis first version can show demonstration responses and manage conversations.\n\n" +
+    "For intelligent answers like ChatGPT, Gemini, or Claude, we still need to connect a real AI service through a secure backend.";
+}
+
+
+// SEND MESSAGE
+
+form.addEventListener("submit", function(event) {
+  event.preventDefault();
+
+  if (waiting) return;
+
+  const text = input.value.trim();
+
+  if (!text) return;
+
+  if (!getCurrentChat()) {
+    newChat();
+  }
+
+  const chat = getCurrentChat();
+
+  chat.messages.push({
+    role:"user",
+    text:text
+  });
+
+  if (chat.messages.length === 1) {
+    chat.title = text.slice(0,30);
+  }
+
+  input.value = "";
+  input.style.height = "auto";
+
+  renderHistory();
+  renderMessages();
+  saveChats();
+
+  waiting = true;
+  document.getElementById("sendBtn").disabled = true;
+
+  const typing = document.createElement("div");
+  typing.className = "typing";
+  typing.textContent = "✦ ChatSmart is preparing a demo response...";
+  messages.appendChild(typing);
+
+  scrollBottom();
+
+  const targetId = chat.id;
+
+  setTimeout(() => {
+    const reply = generateResponse(text);
+
+    const targetChat = chats.find(c => c.id === targetId);
+
+    if (targetChat) {
+      targetChat.messages.push({
+        role:"assistant",
+        text:reply
+      });
+    }
+
+    waiting = false;
+    document.getElementById("sendBtn").disabled = false;
+
+    if (currentChatId === targetId) {
+      renderMessages();
+    }
+
+    renderHistory();
+    saveChats();
+
+  },700);
+
+});
+
+
+// QUICK SUGGESTIONS
+
+document.addEventListener("click", function(event) {
+  const button = event.target.closest("[data-prompt]");
+
+  if (!button) return;
+
+  input.value = button.dataset.prompt;
+  form.requestSubmit();
+});
+
+
+// AUTO RESIZE
+
+input.addEventListener("input", function() {
+  this.style.height = "auto";
+  this.style.height =
+    Math.min(this.scrollHeight,130) + "px";
+});
+
+
+// ENTER TO SEND
+
+input.addEventListener("keydown", function(event) {
+  if (event.key === "Enter" && !event.shiftKey) {
+    event.preventDefault();
+    form.requestSubmit();
+  }
+});
+
+
+// NEW CHAT BUTTON
+
+document.getElementById("newChatBtn")
+  .addEventListener("click", newChat);
+
+
+// MOBILE MENU
+
+document.getElementById("menuBtn")
+  .addEventListener("click", function() {
+    sidebar.classList.toggle("open");
+  });
+
+
+// CLEAR HISTORY
+
+document.getElementById("clearBtn")
+  .addEventListener("click", function() {
+    if (!confirm("Are you sure you want to clear all chat history?")) {
+      return;
+    }
+
+    chats = [];
+    currentChatId = null;
+
+    saveChats();
+    renderHistory();
+    renderMessages();
+  });
+
+
+// START APP
+
+loadChats();
+
+</script>
+
+</body>
+</html>
